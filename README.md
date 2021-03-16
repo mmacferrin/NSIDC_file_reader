@@ -1,4 +1,7 @@
 # NSIDC_file_reader
+
+![Bin_to_Geotiff](bin_to_tif_drawing.jpg)
+
 Scripts for reading and exporting various National Snow &amp; Ice Data Center ([NSIDC](https://nsidc.org/)) flat binary (.bin) data files.
 
 Many of NSIDC's files comes with IDL .pro scripts to read and/or plot them, but without IDL (a closed-source programming environment), you have to just figure it out yourself. Here are some simple Python scripts with command-line interfaces for easily reading and exporting the data yourself. You shouldn't need to edit the files (unless you want to develop it further or work out a bug, in which case please submit a pull request!), you should just be able to run them from the command line.
