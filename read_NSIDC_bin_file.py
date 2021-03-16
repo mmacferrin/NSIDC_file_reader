@@ -5,6 +5,9 @@ Created on Fri Feb 21 15:03:50 2020
 @author: mmacferrin
 """
 import numpy
+import argparse
+import re
+import os
 
 # 332 rows x 316 cols for Antarctic Polar Stereo data,
 # per https://nsidc.org/data/polar-stereo/ps_grids.html
@@ -14,6 +17,14 @@ import numpy
 # For Antarctica, (rows, cols) = (332,316)
 # For Arctic, (rows, cols) = (448, 304)
 DEFAULT_GRID_SHAPE = (332, 316)
+
+GRIDSIZE_25_N = numpy.array(((5850+5350)/25, (3750+3850)/25), dtype=numpy.long) # (448, 304)
+GRIDSIZE_25_S = numpy.array(((4350+3950)/25, (3950+3950)/25), dtype=numpy.long) # (332, 316)
+GRIDSIZE_12_5_N = GRIDSIZE_25_N * 2 # (896, 608)
+GRIDSIZE_12_5_S = GRIDSIZE_25_S * 2 # (664, 632)
+GRIDSIZE_6_25_N = GRIDSIZE_25_N * 4
+GRIDSIZE_6_25_S = GRIDSIZE_25_S * 4
+
 
 def read_NSIDC_bin_file(fname,
                         grid_shape = DEFAULT_GRID_SHAPE,
@@ -82,7 +93,43 @@ def read_NSIDC_bin_file(fname,
 
     return return_array
 
-if __name__ == "__main__":
+def get_hemisphere_and_resolution_from_nsidc_filename(fname):
+    """Get the resolution from the filename.
+
+    From the file specs on https://nsidc.org/data/nsidc-0001
+    Will be 12.5 or 25 km.
+    """
+    fbase = os.path.splitext(os.path.split(fname)[1])[0]
+
+    SSMI_REGEX =  r"(?<=\Atb_f\d{2}_\d{8}_v\d_)[ns]\d{2}(?=[vh])"
+
+    matches = re.search(fbase, SSMI_REGEX)
+    if matches is None:
+        return None, None
+
+    match = matches.group(0)
+    hemisphere = match[0].upper()
+
+    frequency = int(match[1:2])
+
+    # The resolutions for each frequency in the NSIDC data products.
+    # Dictionary is "frequency:resolutin" key:value pair.
+    resolution = {19:25.0,
+                  22:25.0,
+                  37:25.0,
+                  85:12.5,
+                  91:12.5}[frequency]
+
+    return hemisphere, resolution
+
+def output_array_to_stdout(array):
+    """Output a 2D array to stdout."""
+    for row in array:
+        print(" ".join([str(i) for i in row]))
+    return
+
+def testing():
+    """Just a few test functions."""
     # Testing this out on a few files, examples using different types of data products.
 
     # An NSIDC-0001 brightness-temperature file, in 2-byte little-endian integers
@@ -148,3 +195,90 @@ if __name__ == "__main__":
 
     print(array5.shape, array5.dtype)
     print(array5)
+
+def read_and_parse_args():
+    """Read and parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="Reads an NSIDC .bin file and outputs the array contents. Use 'write_NSIDC_bin_to_gtif.py' to output to a GeoTiff. This will just spit the numbers onto a screen. In order to output to a space-delimited text file, just route the stdout into a file. Example: > read_NSIDC_bin_file myfile.bin > myfile.txt . Read the NSIDC documentation for your data product in order to choose the correct parameters.")
+    parser.add_argument("src", type=str, help="Source fread_NSIDC_bin_fileile (.bin)")
+    parser.add_argument("-resolution", "-r", type=float, default=None, help="Resolution (km): 6.25, 12.5, or 25. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 25 km. Check your NSIDC data source documentation.")
+    parser.add_argument("-hemisphere", type=str, default=None, help="Hemisphere: N or S. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 'N'.")
+    parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes.) (Default: 0)")
+    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element, in bytes. (Default: 2)")
+    parser.add_argument("-output_type", "-ot", default="float", help="Output data type: 'int' or 'float'. Default 'float'.")
+    parser.add_argument("-multiplier","-m", type=str, default="auto", help="Use a multiplier. With 'auto', defaults to 1 for integers (no mod) and 0.1 for floating-point. If you want to use a different multiplier, put the number here.")
+    parser.add_argument("--signed", "-s", action="store_true", default=False, help="Read bin as signed data. Default to unsigned.")
+
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    # Parse the command-line arguments.
+    args = read_and_parse_args()
+
+    if args.output_type.lower() in ("float", "f"):
+        out_type = float
+    elif args.output_type.lower() in ("int", "i", "d"):
+        out_type = int
+    else:
+        raise ValueError("Uknown output_type (can be: 'int','i','d','float', or 'f'):", str(args.output_type))
+
+    if args.multiplier.lower().strip() != "auto":
+        multiplier = float(args.multiplier)
+    else:
+        multiplier = args.multiplier
+
+    # Resolve the resolution, from:
+    # 1) The command line argument
+    # 2) The filename, or
+    # 3) Just use the default (25 km))
+    if args.resolution is None or args.hemisphere is None:
+        hemisphere_from_fname, resolution_from_fname = get_hemisphere_and_resolution_from_nsidc_filename(args.src)
+    if args.resolution is None:
+        if resolution_from_fname is None:
+            resolution = 25
+        else:
+            resolution = resolution_from_fname
+    else:
+        resolution = float(args.resolution)
+
+    if args.hemisphere is None:
+        if hemisphere_from_fname is None:
+            hemisphere = 'N'
+        else:
+            hemisphere = hemisphere_from_fname
+    else:
+        hemisphere = args.hemisphere.strip().upper()
+
+    if hemisphere == 'N':
+        if resolution == 25:
+            gridsize = GRIDSIZE_25_N
+        elif resolution == 12.5:
+            gridsize = GRIDSIZE_12_5_N
+        elif resolution == 6.25:
+            gridsize = GRIDSIZE_6_25_N
+        else:
+            raise ValueError("Unknown resolution: {0}".format(resolution))
+
+    elif hemisphere == 'S':
+        if resolution == 25:
+            gridsize = GRIDSIZE_25_S
+        elif resolution == 12.5:
+            gridsize = GRIDSIZE_12_5_S
+        elif resolution == 6.25:
+            gridsize = GRIDSIZE_6_25_S
+        else:
+            raise ValueError("Unknown resolution: {0}".format(resolution))
+
+    else:
+        raise ValueError("Unknown hemisphere: {0}".format(hemisphere))
+
+    # Read the array
+    array = read_NSIDC_bin_file(args.src,
+                                grid_shape = gridsize,
+                                header_size=args.header_size,
+                                element_size=args.element_size,
+                                return_type=out_type,
+                                signed=args.signed,
+                                multiplier=args.multiplier)
+
+    # Print the array to stdout
+    output_array_to_stdout(array)

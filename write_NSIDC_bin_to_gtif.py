@@ -6,11 +6,10 @@ Created on Mon Apr  6 15:21:04 2020
 """
 import numpy
 import argparse
-import re
 import os
 from osgeo import osr, gdal
 
-from read_NSIDC_bin_file import read_NSIDC_bin_file
+from read_NSIDC_bin_file import read_NSIDC_bin_file, get_hemisphere_and_resolution_from_nsidc_filename
 
 # See https://nsidc.org/data/polar-stereo/ps_grids.html for documentation on
 # these polar stereo grids
@@ -64,35 +63,6 @@ def retrieve_ssmi_grid_coords(N_or_S="S", gridsize_km=25):
     y_vector = numpy.arange(UL_corner[1], UL_corner[1]+(-gridsize_km*gridsize_yx[0]), step=-gridsize_km)
     return x_vector, y_vector
 
-def get_hemisphere_and_resolution_from_ssmi_filename(fname):
-    """Get the resolution from the filename.
-
-    From the file specs on https://nsidc.org/data/nsidc-0001
-    Will be 12.5 or 25 km.
-    """
-    fbase = os.path.splitext(os.path.split(fname)[1])[0]
-
-    SSMI_REGEX =  r"(?<=\Atb_f\d{2}_\d{8}_v\d_)[ns]\d{2}(?=[vh])"
-
-    matches = re.search(fbase, SSMI_REGEX)
-    if matches is None:
-        return None, None
-
-    match = matches.group(0)
-    hemisphere = match[0].upper()
-
-    frequency = int(match[1:2])
-
-    # The resolutions for each frequency in the NSIDC data products.
-    # Dictionary is "frequency:resolutin" key:value pair.
-    resolution = {19:25.0,
-                  22:25.0,
-                  37:25.0,
-                  85:12.5,
-                  91:12.5}[frequency]
-
-    return hemisphere, resolution
-
 def output_bin_to_gtif(bin_file,
                        gtif_file=None,
                        element_size=2,
@@ -138,7 +108,7 @@ def output_bin_to_gtif(bin_file,
     if resolution is None or hemisphere is None:
         # Get hemisphere & resolution from file name
         hemisphere_from_fname, resolution_from_fname = \
-            get_hemisphere_and_resolution_from_ssmi_filename(bin_file)
+            get_hemisphere_and_resolution_from_nsidc_filename(bin_file)
         # Only replace values if not explicitly given.
         if resolution is None:
             resolution = resolution_from_fname
