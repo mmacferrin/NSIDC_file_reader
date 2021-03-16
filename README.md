@@ -111,7 +111,7 @@ A working python3 installation with the following libraries installed:
 
 **Notes:**
 
-These functions have **not** been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files in both the Northern & Southern hemispheres. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request, or just shoot me an email (see below), and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest updates to the code!)
+These functions have **not** been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files in both the Northern & Southern hemispheres. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request, or just shoot me an email (see below), and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest fixes to the code yourself!)
 
 The [convert_bin_to_gtif.py](#convert_bin_to_gtifpy) file depends upon the [read_bin.py](#read_binpy) file. They should be kept in the same directory.
 
@@ -122,6 +122,8 @@ Next Step: I plan to put necessary metadata about each NSIDC data product into a
 **Credit and Lisense**
 
 Distributed freely under the [GPL3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
+All the usual exclusions apply. I'm not responsible if, say, this code accidentally crashes your computer or an asteroid implodes your roof the very moment you run the script (though that would be pretty cool... I hope you're okay!). The code is presented as-is, I make updates whenever I feel like it. If you make improvements, feel free to contribute by making a Github pull request and adding your changes, or just email me.
 
 Created by Mike MacFerrin, University of Colorado ([email](mailto:michael.macferrin@colorado.edu)).
 
