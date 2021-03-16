@@ -111,9 +111,13 @@ A working python3 installation with the following libraries installed:
 
 **Notes:**
 
-These functions have not been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest updates to the code!)
+These functions have **not** been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files in both the Northern & Southern hemispheres. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request, or just shoot me an email (see below), and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest updates to the code!)
 
 The [convert_bin_to_gtif.py](#convert_bin_to_gtifpy) file depends upon the [read_bin.py](#read_binpy) file. They should be kept in the same directory.
+
+I have not yet implemented writing GeoTiff's from NSIDC EASE grid data products (just polar stereo so far). It isn't hard to do, I just haven't done it yet. If you need to create GeoTiff's from EASE Grid data products, just let me know and I'll toss that feature in there.
+
+Next Step: I plan to put necessary metadata about each NSIDC data product into a machine-readable .csv metadata file, to ease including other products (such as the EASE grid binary products) and having them automatically converted. Will get to it at some point.
 
 **Credit and Lisense**
 
