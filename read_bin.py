@@ -101,6 +101,7 @@ def get_hemisphere_and_resolution_from_nsidc_filename(fname):
     """
     fbase = os.path.splitext(os.path.split(fname)[1])[0]
 
+    # This is the filename structure for NSIDC-0001. TODO: Generalize it for other file name structures.
     SSMI_REGEX =  r"(?<=\Atb_f\d{2}_\d{8}_v\d_)[ns]\d{2}(?=[vh])"
 
     matches = re.search(fbase, SSMI_REGEX)

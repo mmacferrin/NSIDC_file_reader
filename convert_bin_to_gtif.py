@@ -9,7 +9,7 @@ import argparse
 import os
 from osgeo import osr, gdal
 
-from read_NSIDC_bin_file import read_NSIDC_bin_file, get_hemisphere_and_resolution_from_nsidc_filename
+from read_bin import read_NSIDC_bin_file, get_hemisphere_and_resolution_from_nsidc_filename
 
 # See https://nsidc.org/data/polar-stereo/ps_grids.html for documentation on
 # these polar stereo grids
@@ -215,11 +215,13 @@ def output_gtif(array, gtif_file, resolution=25, hemisphere="S", nodata=0, verbo
     band = ds.GetRasterBand(1)
     band.WriteArray(array)
 
+    # Set the nodata value in the band (if not None)
     if nodata != None:
         band.SetNoDataValue(nodata)
 
+    # Set the array statistics.
+    # Only set statistics if this isn't an empty array.
     if len(array_wo_nodata) > 0:
-        # Only set statistics if this isn't an empty array.
         band.SetStatistics(float(numpy.min(array_wo_nodata)),
                            float(numpy.max(array_wo_nodata)),
                            float(numpy.mean(array_wo_nodata)),
@@ -245,13 +247,13 @@ def read_and_parse_args():
     parser.add_argument("src", type=str, help="Source file (.bin)")
     parser.add_argument("-dest", type=str, default="", help="Destination file (.tif). Default: Write the same filename in the same location with a .tif extension rather than .bin.")
     parser.add_argument("-resolution", "-r", type=float, default=None, help="Resolution (km): 6.25, 12.5, or 25. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 25 km. Check your NSIDC data source documentation.")
-    parser.add_argument("-hemisphere", type=str, default=None, help="Hemisphere: N or S. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 'N'.")
-    parser.add_argument("-nodata", "-nd", type=int, default=0, help="Nodata value. (Default: 0). IMPORTANT: If you want a nodata value other than 0, you should specify it. If you don't want to use a nodata value, then specify a nonsense value that is not contained in the data (such as -99999).")
-    parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes.) (Default: 0)")
-    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element, in bytes. (Default: 2)")
+    parser.add_argument("-hemisphere", type=str, default=None, help="Hemisphere: one letter, N or S. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 'N'.")
+    parser.add_argument("-nodata", "-nd", type=int, default=None, help="Nodata value. Can be a number, or 'None' (without the quotes). (Default: None)")
+    parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes). (Default: 0)")
+    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element (in bytes). (Default: 2)")
     parser.add_argument("-output_type", "-ot", default="float", help="Output data type: 'int' or 'float'. Default 'float'.")
     parser.add_argument("-multiplier","-m", type=str, default="auto", help="Use a multiplier. With 'auto', defaults to 1 for integers (no mod) and 0.1 for floating-point. If you want to use a different multiplier, put the number here.")
-    parser.add_argument("--signed", "-s", action="store_true", default=False, help="Read bin as signed data. Default to unsigned.")
+    parser.add_argument("--signed", "-s", action="store_true", default=False, help="If set, read binary data as signed numbers. (Default: unsigned)")
     parser.add_argument("--verbose", "-v", action="store_true", default=False, help="Increase output verbosity.")
 
     return parser.parse_args()
@@ -304,13 +306,21 @@ if __name__ == "__main__":
     else:
         multiplier = args.multiplier
 
+    if args.nodata is None:
+        NDV = None
+    else:
+        try:
+            NDV = float(args.nodata)
+        except ValueError:
+            NDV = None
+
     output_bin_to_gtif(args.src,
                        args.dest,
                        header_size = args.header_size,
                        element_size = args.element_size,
                        resolution = resolution,
                        hemisphere = hemisphere,
-                       nodata = int(args.nodata),
+                       nodata = NDV,
                        return_type = out_type,
                        multiplier = multiplier,
                        verbose = args.verbose)
