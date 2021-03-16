@@ -214,7 +214,7 @@ choose the correct parameters listed below.""")
     parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes.) (Default: 0)")
     parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element, in bytes. Most NSIDC files use 1- or 2-byte numbers. Check the documentation of the dataset. (Default: 2)")
     parser.add_argument("-output_type", "-ot", default="int", help="Output data type: 'int' or 'float'. Default 'int'.")
-    parser.add_argument("-multiplier","-m", type=str, default="auto", help="A multiplier to create the output numbers (input integers * multiplier). Any number, or 'auto'. With 'auto', defaults to 1 for integers (no modification) and 0.1 for floating-point (2731 becomes 273.1, e.g.). Or, specify your own multiplier here.")
+    parser.add_argument("-multiplier","-m", type=str, default="auto", help="A multiplier to create the output numbers. Any number, or 'auto'. With 'auto', defaults to 1 for integers (no modification) and 0.1 for floating-point (2731 becomes 273.1, e.g.). Or, specify your own multiplier here.")
     parser.add_argument("--signed", "-s", action="store_true", default=False, help="Read bin as signed data. Default to unsigned.")
 
     return parser.parse_args()

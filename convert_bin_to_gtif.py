@@ -243,16 +243,16 @@ def output_gtif(array, gtif_file, resolution=25, hemisphere="S", nodata=0, verbo
 
 def read_and_parse_args():
     """Read and parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Outputs a GTIFF from an NSDIC flat binary (.bin) data file.\n(Since NSIDC still hasn't figured out that not everyone wants to use IDL.)")
+    parser = argparse.ArgumentParser(description="Outputs a geo-referenced TIF (.tif) from an NSDIC flat binary (.bin) data file.")
     parser.add_argument("src", type=str, help="Source file (.bin)")
     parser.add_argument("-dest", type=str, default="", help="Destination file (.tif). Default: Write the same filename in the same location with a .tif extension rather than .bin.")
     parser.add_argument("-resolution", "-r", type=float, default=None, help="Resolution (km): 6.25, 12.5, or 25. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 25 km. Check your NSIDC data source documentation.")
     parser.add_argument("-hemisphere", type=str, default=None, help="Hemisphere: one letter, N or S. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 'N'.")
     parser.add_argument("-nodata", "-nd", type=int, default=None, help="Nodata value. Can be a number, or 'None' (without the quotes). (Default: None)")
     parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes). (Default: 0)")
-    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element (in bytes). (Default: 2)")
+    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element (in bytes). Typically 1 or 2 for NSIDC files. (Default: 2)")
     parser.add_argument("-output_type", "-ot", default="float", help="Output data type: 'int' or 'float'. Default 'float'.")
-    parser.add_argument("-multiplier","-m", type=str, default="auto", help="Use a multiplier. With 'auto', defaults to 1 for integers (no mod) and 0.1 for floating-point. If you want to use a different multiplier, put the number here.")
+    parser.add_argument("-multiplier","-m", type=str, default="auto", help="Use a multiplier. With 'auto', defaults to 1 (no mod) for integer output and 0.1 for floating-point (2731 -> 273.1). If you want to use a different multiplier, put the number here.")
     parser.add_argument("--signed", "-s", action="store_true", default=False, help="If set, read binary data as signed numbers. (Default: unsigned)")
     parser.add_argument("--verbose", "-v", action="store_true", default=False, help="Increase output verbosity.")
 

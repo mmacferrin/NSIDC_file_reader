@@ -9,16 +9,17 @@ Many of NSIDC's files comes with IDL .pro scripts to read and/or plot them, but 
 Two files are included here. They both have command-line interfaces, or you can import the functions from the scripts and use them with your Python code.
 
 ### convert_bin_to_gtif.py
-    usage: python convert_bin_to_gtif.py [-h] [-dest DEST] [-resolution RESOLUTION]
-                              [-hemisphere HEMISPHERE] [-nodata NODATA]
-                              [-header_size HEADER_SIZE]
-                              [-element_size ELEMENT_SIZE]
-                              [-output_type OUTPUT_TYPE]
-                              [-multiplier MULTIPLIER] [--signed] [--verbose]
-                              src
+    usage: convert_bin_to_gtif.py [-h] [-dest DEST] [-resolution RESOLUTION]
+                                  [-hemisphere HEMISPHERE] [-nodata NODATA]
+                                  [-header_size HEADER_SIZE]
+                                  [-element_size ELEMENT_SIZE]
+                                  [-output_type OUTPUT_TYPE]
+                                  [-multiplier MULTIPLIER] [--signed] [--verbose]
+                                  src
     
-    Outputs a GTIFF from an NSDIC flat binary (.bin) data file.
-
+    Outputs a geo-referenced TIF (.tif) from an NSDIC flat binary (.bin) data
+    file.
+    
     positional arguments:
       src                   Source file (.bin)
     
@@ -43,21 +44,20 @@ Two files are included here. They both have command-line interfaces, or you can 
                             Size of .bin file header (in bytes). (Default: 0)
       -element_size ELEMENT_SIZE, -es ELEMENT_SIZE
                             Size of each numerical .bin data element (in bytes).
-                            (Default: 2)
+                            Typically 1 or 2 for NSIDC files. (Default: 2)
       -output_type OUTPUT_TYPE, -ot OUTPUT_TYPE
-                            Output data type: 'int' or 'float'. Default 'int'.
+                            Output data type: 'int' or 'float'. Default 'float'.
       -multiplier MULTIPLIER, -m MULTIPLIER
-                            Use a multiplier. With 'auto', defaults to 1 for
-                            integers (no mod) and 0.1 for floating-point. If you
-                            want to use a different multiplier, put the number
-                            here.
+                            Use a multiplier. With 'auto', defaults to 1 (no mod)
+                            for integer output and 0.1 for floating-point (2731 ->
+                            273.1). If you want to use a different multiplier, put
+                            the number here.
       --signed, -s          If set, read binary data as signed numbers. (Default:
                             unsigned)
       --verbose, -v         Increase output verbosity.
 
-
 ### read_bin.py
-    usage: python read_bin.py [-h] [-resolution RESOLUTION] [-hemisphere HEMISPHERE]
+    usage: read_bin.py [-h] [-resolution RESOLUTION] [-hemisphere HEMISPHERE]
                        [-header_size HEADER_SIZE] [-element_size ELEMENT_SIZE]
                        [-output_type OUTPUT_TYPE] [-multiplier MULTIPLIER]
                        [--signed]
@@ -67,9 +67,7 @@ Two files are included here. They both have command-line interfaces, or you can 
     'convert_bin_to_gtif.py' to output to a GeoTiff. This will just spit the
     numbers onto a screen. In order to output to a space-delimited text file, just
     route the stdout into a file. Example: 
-
-                    $ python read_bin.py infile.bin > outfile.txt
-
+                                $ python read_bin.py infile.bin > outfile.txt
     Read the NSIDC documentation for your data product in order to
     choose the correct parameters listed below.
     
@@ -91,16 +89,16 @@ Two files are included here. They both have command-line interfaces, or you can 
                             Size of .bin file header (in bytes.) (Default: 0)
       -element_size ELEMENT_SIZE, -es ELEMENT_SIZE
                             Size of each numerical .bin data element, in bytes.
-                            (Default: 2)
+                            Most NSIDC files use 1- or 2-byte numbers. Check the
+                            documentation of the dataset. (Default: 2)
       -output_type OUTPUT_TYPE, -ot OUTPUT_TYPE
                             Output data type: 'int' or 'float'. Default 'int'.
       -multiplier MULTIPLIER, -m MULTIPLIER
-                            Use a multiplier. With 'auto', defaults to 1 for
-                            integers (no modification) and 0.1 for floating-point
-                            (2731 becomes 273.1, e.g.). Or, specify your own
-                            multiplier here.
+                            A multiplier to create the output numbers. Any number,
+                            or 'auto'. With 'auto', defaults to 1 for integers (no
+                            modification) and 0.1 for floating-point (2731 becomes
+                            273.1, e.g.). Or, specify your own multiplier here.
       --signed, -s          Read bin as signed data. Default to unsigned.
-
 
 **Requirements:**
 
