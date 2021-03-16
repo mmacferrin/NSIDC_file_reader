@@ -64,9 +64,11 @@ Two files are included here. They both have command-line interfaces, or you can 
     'write_NSIDC_bin_to_gtif.py' to output to a GeoTiff. This will just spit the
     numbers onto a screen. In order to output to a space-delimited text file, just
     route the stdout into a file. Example:
-                              $ read_NSIDC_bin_file myfile.bin > outfile.txt
+
+                    $ python read_NSIDC_bin_file myfile.bin > outfile.txt
+
     Read the NSIDC documentation for your data product in order to
-    choose the correct parameters.
+    choose the correct parameters listed below.
     
     positional arguments:
       src                   Source file (.bin)
