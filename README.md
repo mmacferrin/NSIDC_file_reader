@@ -5,3 +5,5 @@ Most the files comes with IDL .pro scripts to read and/or plot them, but without
 
 Alerts or a simple thanks can be sent to Mike MacFerrin (michael.macferrin@colorado.edu).
 For suggestions or bugs, please submit an Issue ticket. If you'd like to add functionality or fix a bug, please submit a pull request.
+
+As you can tell, this is mostly empty. I'm tweaking & uploading the files soon. More to come.
