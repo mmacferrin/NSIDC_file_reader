@@ -129,4 +129,4 @@ Created by Mike MacFerrin, University of Colorado ([email](mailto:michael.macfer
 
 If this code is used in a research work or publication, a quick acknowledgement at the end/footnote of the work is requested.
 
-If you would like to show your appreciation by buying me a coffee, feel free to hit my [PayPal](https://paypal.me/MikeMacFerrin) or [Venmo](www.venmo.com/Mike-MacFerrin). :blush:
+If you would like to show your appreciation by buying me a coffee, feel free to hit my [PayPal](https://paypal.me/MikeMacFerrin) or [Venmo](http://www.venmo.com/Mike-MacFerrin). :blush:
