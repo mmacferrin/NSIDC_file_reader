@@ -6,7 +6,7 @@ Many of NSIDC's files comes with IDL .pro scripts to read and/or plot them, but 
 Two files are included here. They both have command-line interfaces, or you can import the functions from the scripts and use them with your Python code.
 
 ### convert_bin_to_gtif.py
->     usage: python convert_bin_to_gtif.py [-h] [-dest DEST] [-resolution RESOLUTION]
+    usage: python convert_bin_to_gtif.py [-h] [-dest DEST] [-resolution RESOLUTION]
                               [-hemisphere HEMISPHERE] [-nodata NODATA]
                               [-header_size HEADER_SIZE]
                               [-element_size ELEMENT_SIZE]
@@ -54,7 +54,7 @@ Two files are included here. They both have command-line interfaces, or you can 
 
 
 ### read_bin.py
->     usage: python read_bin.py [-h] [-resolution RESOLUTION] [-hemisphere HEMISPHERE]
+    usage: python read_bin.py [-h] [-resolution RESOLUTION] [-hemisphere HEMISPHERE]
                        [-header_size HEADER_SIZE] [-element_size ELEMENT_SIZE]
                        [-output_type OUTPUT_TYPE] [-multiplier MULTIPLIER]
                        [--signed]
@@ -118,4 +118,4 @@ Created by Mike MacFerrin, University of Colorado ([email](mailto:michael.macfer
 
 If this code is used in a research work or publication, a quick acknowledgement at the end/footnote of the work is requested.
 
-If you would like to show your appreciation by buying me a coffee, feel free to hit up my [PayPal](https://paypal.me/MikeMacFerrin) or [Venmo](www.venmo.com/Mike-MacFerrin).
+If you would like to show your appreciation by buying me a coffee, feel free to hit my [PayPal](https://paypal.me/MikeMacFerrin) or [Venmo](www.venmo.com/Mike-MacFerrin) with coffee-money.
