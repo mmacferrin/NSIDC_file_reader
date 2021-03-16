@@ -42,7 +42,7 @@ Two files are included here. They both have command-line interfaces, or you can 
                             Size of each numerical .bin data element (in bytes).
                             (Default: 2)
       -output_type OUTPUT_TYPE, -ot OUTPUT_TYPE
-                            Output data type: 'int' or 'float'. Default 'float'.
+                            Output data type: 'int' or 'float'. Default 'int'.
       -multiplier MULTIPLIER, -m MULTIPLIER
                             Use a multiplier. With 'auto', defaults to 1 for
                             integers (no mod) and 0.1 for floating-point. If you
@@ -61,11 +61,11 @@ Two files are included here. They both have command-line interfaces, or you can 
                        src
     
     Reads an NSIDC .bin file and outputs the array contents. Use
-    'write_NSIDC_bin_to_gtif.py' to output to a GeoTiff. This will just spit the
+    'convert_bin_to_gtif.py' to output to a GeoTiff. This will just spit the
     numbers onto a screen. In order to output to a space-delimited text file, just
-    route the stdout into a file. Example:
+    route the stdout into a file. Example: 
 
-                    $ python read_NSIDC_bin_file myfile.bin > outfile.txt
+                    $ python read_bin.py infile.bin > outfile.txt
 
     Read the NSIDC documentation for your data product in order to
     choose the correct parameters listed below.
@@ -90,12 +90,12 @@ Two files are included here. They both have command-line interfaces, or you can 
                             Size of each numerical .bin data element, in bytes.
                             (Default: 2)
       -output_type OUTPUT_TYPE, -ot OUTPUT_TYPE
-                            Output data type: 'int' or 'float'. Default 'float'.
+                            Output data type: 'int' or 'float'. Default 'int'.
       -multiplier MULTIPLIER, -m MULTIPLIER
                             Use a multiplier. With 'auto', defaults to 1 for
-                            integers (no mod) and 0.1 for floating-point. If you
-                            want to use a different multiplier, put the number
-                            here.
+                            integers (no modification) and 0.1 for floating-point
+                            (2731 becomes 273.1, e.g.). Or, specify your own
+                            multiplier here.
       --signed, -s          Read bin as signed data. Default to unsigned.
 
 

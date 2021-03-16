@@ -199,14 +199,22 @@ def testing():
 
 def read_and_parse_args():
     """Read and parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Reads an NSIDC .bin file and outputs the array contents. Use 'write_NSIDC_bin_to_gtif.py' to output to a GeoTiff. This will just spit the numbers onto a screen. In order to output to a space-delimited text file, just route the stdout into a file. Example: > read_NSIDC_bin_file myfile.bin > myfile.txt . Read the NSIDC documentation for your data product in order to choose the correct parameters.")
-    parser.add_argument("src", type=str, help="Source fread_NSIDC_bin_fileile (.bin)")
+    parser = argparse.ArgumentParser(description="""Reads an NSIDC .bin file and outputs the array contents. Use
+'convert_bin_to_gtif.py' to output to a GeoTiff. This will just spit the
+numbers onto a screen. In order to output to a space-delimited text file, just
+route the stdout into a file. Example:
+
+                $ python read_bin.py infile.bin > outfile.txt
+
+Read the NSIDC documentation for your data product in order to
+choose the correct parameters listed below.""")
+    parser.add_argument("src", type=str, help="Source file (.bin)")
     parser.add_argument("-resolution", "-r", type=float, default=None, help="Resolution (km): 6.25, 12.5, or 25. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 25 km. Check your NSIDC data source documentation.")
     parser.add_argument("-hemisphere", type=str, default=None, help="Hemisphere: N or S. If omitted, it is interpreted from the file name. If cannot be interpreted, defaults to 'N'.")
     parser.add_argument("-header_size", "-hs", type=int, default=0, help="Size of .bin file header (in bytes.) (Default: 0)")
-    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element, in bytes. (Default: 2)")
-    parser.add_argument("-output_type", "-ot", default="float", help="Output data type: 'int' or 'float'. Default 'float'.")
-    parser.add_argument("-multiplier","-m", type=str, default="auto", help="Use a multiplier. With 'auto', defaults to 1 for integers (no mod) and 0.1 for floating-point. If you want to use a different multiplier, put the number here.")
+    parser.add_argument("-element_size", "-es", type=int, default=2, help="Size of each numerical .bin data element, in bytes. Most NSIDC files use 1- or 2-byte numbers. Check the documentation of the dataset. (Default: 2)")
+    parser.add_argument("-output_type", "-ot", default="int", help="Output data type: 'int' or 'float'. Default 'int'.")
+    parser.add_argument("-multiplier","-m", type=str, default="auto", help="A multiplier to create the output numbers (input integers * multiplier). Any number, or 'auto'. With 'auto', defaults to 1 for integers (no modification) and 0.1 for floating-point (2731 becomes 273.1, e.g.). Or, specify your own multiplier here.")
     parser.add_argument("--signed", "-s", action="store_true", default=False, help="Read bin as signed data. Default to unsigned.")
 
     return parser.parse_args()
