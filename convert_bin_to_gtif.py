@@ -101,6 +101,8 @@ def output_bin_to_gtif(bin_file,
     nodata = Nodata value to put in the geotiff. Defaults to 0.0
 
     return_type = The data type of the geotiff raster band. Defaults to float.
+
+    Returns: None. Just saves the geotiff.
     """
     if (gtif_file is None) or (len(gtif_file.strip().upper()) == 0):
         gtif_file = os.path.splitext(bin_file)[0] + ".tif"
@@ -165,10 +167,22 @@ def get_nsidc_geotransform(hemisphere, resolution):
     return (UL_X, resolution*1000, 0, UL_Y, 0, -resolution*1000)
 
 
-def output_gtif(array, gtif_file, resolution=25, hemisphere="S", nodata=0, verbose=True):
+def output_gtif(array,
+                gtif_file,
+                resolution=25,
+                hemisphere="S",
+                nodata=0,
+                verbose=True):
     """Take an array, output to a geotiff in the NSIDC resolution specified.
 
     Defaults to 25 km resolution, southern hemisphere.
+    Resoltions currently handled: 25 km, 12.5 km, 6.25 km.
+    Hemispheres: "N" or "S"
+
+    This currently only produces NSIDC Polar Stereo grids. Will update the code later
+    to also include EASE and other grids.
+
+    Returns: None. Just saves the geotiff.
     """
     geotransform = get_nsidc_geotransform(hemisphere=hemisphere,
                                           resolution=resolution)

@@ -102,14 +102,36 @@ Two files are included here. They both have command-line interfaces, or you can 
                             273.1, e.g.). Or, specify your own multiplier here.
       --signed, -s          Read bin as signed data. Default to unsigned.
 
-**Requirements:**
+###Using code in your own Python scripts:
 
-A working python3 installation with the following libraries installed:
+If you'd like to use the data without having to export them to .txt or .tif files (who really needs multiple data versions), you can import the needed functions into your own Python code. To do this, place the .py files into your source directory or in a place where they're included in the [PYTHONPATH](https://bic-berkeley.github.io/psych-214-fall-2016/using_pythonpath.html).
 
-  * numpy
-  * osgeo (with associated gdal library and bindings)
+Then in your code, import the following functions (as needed):
 
-**Notes:**
+    from read_bin import read_NSIDC_bin_file
+    from convert_bin_to_gtif import output_bin_to_gtif, output_gtif
+
+The readbin.read_NSIDC_bin_file takes the name of the .bin file, and returns a numpy array with the data contents of the file. It ignores the header information. (If you need the header information, I'm considering writing another function that'll parse it and return that, it just isn't in there yet).
+
+The
+    convert_bin_to_gtif.output_bin_to_gtif()
+function takes the name of a .bin file and writes out the geo-referenced .tif equivalent, same as the command-line options do.
+
+The
+    convert_bin_to_gtif.output_gtif()
+function takes a 2D numpy array (in the same grid shape as one of the NSIDC .bin files), and outputs a geotif from it. This is handy if you have derived products from the NSIDC files (such as, say, a 1/0 mask of sea ice coverage based on concentrations) and wish to product a geo-referenced geotiff from it.
+
+The parameters (required and optional) for these functions are outlined in the code, just open the Python scripts and look there.
+
+
+###System Requirements:
+
+You'll need a working python3 installation with the following libraries installed:
+
+  * **numpy**
+  * **osgeo**, with an installed Geospatial Data Abstraction Library [[GDAL](https://pypi.org/project/GDAL/)] library and python bindings
+
+###Notes:
 
 These functions have **not** been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files in both the Northern & Southern hemispheres. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request, or just shoot me an email (see below), and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest fixes to the code yourself!)
 
@@ -119,7 +141,7 @@ I have not yet implemented writing GeoTiff's from NSIDC EASE grid data products 
 
 Next Step: I plan to put necessary metadata about each NSIDC data product into a machine-readable .csv metadata file, to ease including other products (such as the EASE grid binary products) and having them automatically converted. Will get to it at some point.
 
-**Credit and Lisense**
+###Credit and Lisense
 
 Distributed freely under the [GPL3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
