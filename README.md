@@ -137,7 +137,7 @@ I have not yet implemented writing GeoTiff's from NSIDC EASE grid data products 
 
 Next Step: I plan to put necessary metadata about each NSIDC data product into a machine-readable .csv metadata file, to ease including other products (such as the EASE grid binary products) and having them automatically converted. Will get to it at some point.
 
-###Credit and Lisense
+### Credit and Lisense
 
 Distributed freely under the [GPL3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
