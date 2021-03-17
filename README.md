@@ -102,7 +102,7 @@ Two files are included here. They both have command-line interfaces, or you can 
                             273.1, e.g.). Or, specify your own multiplier here.
       --signed, -s          Read bin as signed data. Default to unsigned.
 
-###Using code in your own Python scripts:
+### Using code in your own Python scripts:
 
 If you'd like to use the data without having to export them to .txt or .tif files (who really needs multiple data versions), you can import the needed functions into your own Python code. To do this, place the .py files into your source directory or in a place where they're included in the [PYTHONPATH](https://bic-berkeley.github.io/psych-214-fall-2016/using_pythonpath.html).
 
@@ -120,14 +120,14 @@ The **convert_bin_to_gtif.output_gtif()** function accepts any 2D numpy array (i
 The parameters (required and optional) for these functions are outlined in the code. Open the Python scripts and look there.
 
 
-###System Requirements:
+### System Requirements:
 
 You'll need a working python3 installation with the following libraries installed:
 
   * **numpy**
   * **osgeo**, with an installed Geospatial Data Abstraction Library [[GDAL](https://pypi.org/project/GDAL/)] library and python bindings
 
-###Notes:
+### Notes:
 
 These functions have **not** been exhaustively tested for all different types of NSIDC .bin data products. They have been tested and seem to work with [NSIDC-0001](https://nsidc.org/data/NSIDC-0001/), [NSIDC-0051](https://nsidc.org/data/nsidc-0051), and [NSIDC-0079](https://nsidc.org/data/nsidc-0079) files in both the Northern & Southern hemispheres. If you are using other .bin data files for which this code doesn't seem to work, please submit an issue request, or just shoot me an email (see below), and I will try to update the code to accomodate. (Or better yet, submit a pull request and suggest fixes to the code yourself!)
 
