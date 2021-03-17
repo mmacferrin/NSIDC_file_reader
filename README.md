@@ -111,17 +111,13 @@ Then in your code, import the following functions (as needed):
     from read_bin import read_NSIDC_bin_file
     from convert_bin_to_gtif import output_bin_to_gtif, output_gtif
 
-The readbin.read_NSIDC_bin_file takes the name of the .bin file, and returns a numpy array with the data contents of the file. It ignores the header information. (If you need the header information, I'm considering writing another function that'll parse it and return that, it just isn't in there yet).
+The **read_bin.read_NSIDC_bin_file()** function takes the name of the .bin file, and returns a numpy array with the data contents of the file. It ignores the header information. (If you need the header information, I'm considering writing another function that'll parse it and return that, it just isn't in there yet).
 
-The
-    convert_bin_to_gtif.output_bin_to_gtif()
-function takes the name of a .bin file and writes out the geo-referenced .tif equivalent, same as the command-line options do.
+The **convert_bin_to_gtif.output_bin_to_gtif()** function accepts the name of a .bin file and writes out the geo-referenced .tif equivalent, same as the command-line options do.
 
-The
-    convert_bin_to_gtif.output_gtif()
-function takes a 2D numpy array (in the same grid shape as one of the NSIDC .bin files), and outputs a geotif from it. This is handy if you have derived products from the NSIDC files (such as, say, a 1/0 mask of sea ice coverage based on concentrations) and wish to product a geo-referenced geotiff from it.
+The **convert_bin_to_gtif.output_gtif()** function accepts any 2D numpy array (in the same grid shape as one of the NSIDC .bin files), and outputs a georeferenced geotif from it. This is handy if you have an output you derived from the NSIDC files (such as, say, a daily 1/0 mask of sea ice extent based on concentration values) and wish to product a geo-referenced geotiff from it for further analysis or visualization.
 
-The parameters (required and optional) for these functions are outlined in the code, just open the Python scripts and look there.
+The parameters (required and optional) for these functions are outlined in the code. Open the Python scripts and look there.
 
 
 ###System Requirements:
